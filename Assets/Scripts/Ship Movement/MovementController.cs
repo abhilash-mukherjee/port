@@ -36,16 +36,16 @@ public class MovementController : MonoBehaviour
 	}
 
     void Movement () {
-		movementFactor = Mathf.Lerp (movementFactor, linearInputSystem.GetInput(), Time.deltaTime / movementThresold);
+		/*movementFactor = Mathf.Lerp (movementFactor, linearInputSystem.GetInput(), Time.deltaTime / movementThresold);
         if(linearInputSystem.GetInput() >=0 )  
         {
             transform.Translate(movementFactor * speed, 0.0f, 0.0f);
         }
         else
-        {
+        {*/
             var backwardMultiplier = movementFactor > 0 ? breakMultiplier : backwardMovementMultiplier;
-            transform.Translate(movementFactor * speed * backwardMultiplier, 0.0f, 0.0f);
-        }
+            transform.Translate(speed * linearInputSystem.GetInput(), 0.0f, 0.0f);
+        /*}*/
 
 		
 	}
@@ -53,11 +53,11 @@ public class MovementController : MonoBehaviour
      void Steer () {
 
 		steerFactor = Mathf.Lerp (steerFactor, lateralInputSystem.GetInput() * movementFactor, Time.deltaTime / movementThresold);
-        if(steerFactor * lateralInputSystem.GetInput() < 0)
+        /*if(steerFactor * lateralInputSystem.GetInput() < 0)
         {
             steerFactor = Mathf.Lerp(steerFactor, lateralInputSystem.GetInput() * movementFactor * oppositeSteerMultiplier, Time.deltaTime / movementThresold);
-        }
-        transform.RotateAround(pivot.position, Vector3.up, Time.deltaTime * steerSpeed * steerFactor);
+        }*/
+        transform.RotateAround(pivot.position, Vector3.up, Time.deltaTime * steerSpeed * lateralInputSystem.GetInput());
 
 	}
     Transform getCOM()
