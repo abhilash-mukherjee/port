@@ -53,6 +53,8 @@ public class ShipPathManager : MonoBehaviour
     }
     public void OnNewMarkerReached()
     {
+        if (pathMarkers.Count <= 1)
+            return;
         pathMarkers.Dequeue();
         UpdatePathInstructions();
     }

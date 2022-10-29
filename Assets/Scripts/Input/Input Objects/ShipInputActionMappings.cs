@@ -114,6 +114,17 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""df38edca-8dfd-4885-bd5e-d4f0a252a760"",
+                    ""path"": ""<XRController>{RightHand}/primary2DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Steer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""UpDown"",
                     ""id"": ""1888fe77-48f5-4ea8-bd34-551e1e79ce56"",
                     ""path"": ""2DVector(mode=2)"",
@@ -178,6 +189,17 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""LinearMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e6500a2-b236-455d-bd4c-d7b936a4e9cf"",
+                    ""path"": ""<XRController>{LeftHand}/primary2DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LinearMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }

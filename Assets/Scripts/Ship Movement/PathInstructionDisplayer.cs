@@ -14,8 +14,8 @@ public class PathInstructionDisplayer : MonoBehaviour
     private Vector3 m_nextMilestone;
     private void Update()
     {
-        var angle = Vector3.SignedAngle(m_nextMilestone - driverSeat.transform.position , transform.right, Vector3.up);
-        var str = angle > 0 ? $"Turn {angle} degrees left" : $"Turn {-angle} degrees right";
+        var angle = Vector3.SignedAngle(transform.forward, m_nextMilestone - driverSeat.transform.position , Vector3.up);
+        var str = angle < 0 ? $"Turn {-angle} degrees left" : $"Turn {angle} degrees right";
         directionText.text = str;
     }
     public void OnDirectionUpdated()

@@ -20,7 +20,7 @@ public class PathMarker : MonoBehaviour
 
     void Update()
     {
-        if (PathManager.DriverSeat.transform.position.x - transform.position.x > distanceCorrection)
+        if (PathManager.DriverSeat.transform.position.z - transform.position.z > distanceCorrection)
         {
             OnShipHitMarker();
 
