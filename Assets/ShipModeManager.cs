@@ -15,4 +15,8 @@ public class ShipModeManager : MonoBehaviour
     {
         m_mode = newMode;
     }
+    private void Awake()
+    {
+        m_mode = ShipMode.NAVIGATING;
+    }
 }

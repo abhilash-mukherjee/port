@@ -220,6 +220,17 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""Horn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fcbf3f1-e4e3-4119-b76b-1cc662e82037"",
+                    ""path"": ""<OculusTouchController>{RightHand}/primaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Horn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
