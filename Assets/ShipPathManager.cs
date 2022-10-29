@@ -44,7 +44,7 @@ public class ShipPathManager : MonoBehaviour
         {
             Vector3 point = path.GetPointAtDistance(dist);
             Quaternion rot = path.GetRotationAtDistance(dist);
-            var obj = Instantiate(pathMarker.gameObject, point, rot);
+            var obj = Instantiate(pathMarker.gameObject, point, Quaternion.identity);
             var marker = obj.GetComponent<PathMarker>();
             marker.PathManager = this;
             pathMarkers.Enqueue(marker);
