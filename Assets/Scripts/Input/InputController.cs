@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class InputController : MonoBehaviour
     private InputAction linearMovementAction, steerMovementAction;
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
+    [SerializeField] GameEvent hornPressed;
     private InputAction shipInput;
     private void Awake()
     {
@@ -20,11 +22,21 @@ public class InputController : MonoBehaviour
         steerMovementAction = shipInputActions.Ship.Steer;
         linearMovementAction.Enable();
         steerMovementAction.Enable();
+        shipInputActions.Ship.Horn.performed += OnHornPressed;
+        shipInputActions.Ship.Horn.Enable();
     }
+
+    private void OnHornPressed(InputAction.CallbackContext obj)
+    {
+        hornPressed.Raise();
+    }
+
     private void OnDisable()
     {
         linearMovementAction.Disable();
         steerMovementAction.Disable();
+        shipInputActions.Ship.Horn.performed -= OnHornPressed;
+        shipInputActions.Ship.Horn.Disable();
     }
     private void FixedUpdate()
     {

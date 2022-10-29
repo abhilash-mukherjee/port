@@ -44,6 +44,15 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Horn"",
+                    ""type"": ""Button"",
+                    ""id"": ""f08dcef6-a59e-45d7-8c10-9aa0e7787e09"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -200,6 +209,17 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""LinearMovement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3078a785-575f-45a9-9d7c-9ed63571e990"",
+                    ""path"": ""<Keyboard>/#(H)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Horn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -210,6 +230,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         m_Ship = asset.FindActionMap("Ship", throwIfNotFound: true);
         m_Ship_Steer = m_Ship.FindAction("Steer", throwIfNotFound: true);
         m_Ship_LinearMovement = m_Ship.FindAction("LinearMovement", throwIfNotFound: true);
+        m_Ship_Horn = m_Ship.FindAction("Horn", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -271,12 +292,14 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     private IShipActions m_ShipActionsCallbackInterface;
     private readonly InputAction m_Ship_Steer;
     private readonly InputAction m_Ship_LinearMovement;
+    private readonly InputAction m_Ship_Horn;
     public struct ShipActions
     {
         private @ShipInputActionMappings m_Wrapper;
         public ShipActions(@ShipInputActionMappings wrapper) { m_Wrapper = wrapper; }
         public InputAction @Steer => m_Wrapper.m_Ship_Steer;
         public InputAction @LinearMovement => m_Wrapper.m_Ship_LinearMovement;
+        public InputAction @Horn => m_Wrapper.m_Ship_Horn;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -292,6 +315,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @LinearMovement.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnLinearMovement;
                 @LinearMovement.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnLinearMovement;
                 @LinearMovement.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnLinearMovement;
+                @Horn.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnHorn;
+                @Horn.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnHorn;
+                @Horn.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnHorn;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -302,6 +328,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @LinearMovement.started += instance.OnLinearMovement;
                 @LinearMovement.performed += instance.OnLinearMovement;
                 @LinearMovement.canceled += instance.OnLinearMovement;
+                @Horn.started += instance.OnHorn;
+                @Horn.performed += instance.OnHorn;
+                @Horn.canceled += instance.OnHorn;
             }
         }
     }
@@ -310,5 +339,6 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     {
         void OnSteer(InputAction.CallbackContext context);
         void OnLinearMovement(InputAction.CallbackContext context);
+        void OnHorn(InputAction.CallbackContext context);
     }
 }
