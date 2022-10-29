@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86627df879758da41b1b13b7c95176ac, type: 3}
-  m_Name: New Keyboard Horizontal Axis
+  m_Script: {fileID: 11500000, guid: 680e412e93069b1498e6a27c3a826039, type: 3}
+  m_Name: Linear Input
   m_EditorClassIdentifier: 
+  floatValue: 0

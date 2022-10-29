@@ -1,73 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[RequireComponent (typeof (FloatObjectScript))]
+
+[RequireComponent(typeof(WaterFloat))]
+[RequireComponent(typeof(InputController))]
 public class MovementController : MonoBehaviour
 {
-    public Vector3 COM_Position;
-    [Space (15)]
-    public float speed = 1.0f;
-    public float steerSpeed = 1.0f;
-    public float movementThresold = 10.0f;
-    [SerializeField]
-    private Transform pivot;
-    [SerializeField]
-    private InputSystem lateralInputSystem, linearInputSystem;
-    [SerializeField] private float backwardMovementMultiplier = 0.3f;
-    [SerializeField] private float breakMultiplier = 4;
-    [SerializeField] private float oppositeSteerMultiplier = 3;
-    Transform m_COM;
-    float movementFactor;
-    float steerFactor;
-    private void Start()
+    //visible Properties
+    [SerializeField] private SteerInput steerInput;
+    [SerializeField] private LinearInput linearInput;
+    [SerializeField] private float nonSteerAngularDrag = 2f;
+    [SerializeField] private float steerAngularDrag = 0.05f;
+    public Transform Motor;
+    public float SteerPower = 500f;
+    public float Power = 5f;
+    public float MaxSpeed = 10f;
+    public float Drag = 0.1f;
+
+    //used Components
+    protected Rigidbody Rigidbody;
+    protected Quaternion StartRotation;
+    protected ParticleSystem ParticleSystem;
+    protected Camera Camera;
+
+    //internal Properties
+    protected Vector3 CamVel;
+
+
+    public void Awake()
     {
-        lateralInputSystem.StartInput();
-        linearInputSystem.StartInput();
+        ParticleSystem = GetComponentInChildren<ParticleSystem>();
+        Rigidbody = GetComponent<Rigidbody>();
+        StartRotation = Motor.localRotation;
+        Camera = Camera.main;
     }
-    void Update()
+
+    public void FixedUpdate()
     {
-        Balance ();
-	Movement ();
-	Steer ();
+        //default direction
+        var forceDirection = transform.forward;
+
+        Rigidbody.angularDrag = steerInput.Value == 0 ? nonSteerAngularDrag : steerAngularDrag;
+        //Rotational Force
+        Rigidbody.AddForceAtPosition(-steerInput.Value * transform.right * SteerPower / 100f, Motor.position);
+
+        //compute vectors
+        var forward = Vector3.Scale(new Vector3(1, 0, 1), transform.forward);
+        var targetVel = Vector3.zero;
+
+        PhysicsHelper.ApplyForceToReachVelocity(Rigidbody, forward * MaxSpeed *linearInput.Value, Power);
+
+        ////Motor Animation // Particle system
+        //Motor.SetPositionAndRotation(Motor.position, transform.rotation * StartRotation * Quaternion.Euler(0, 30f * steer, 0));
+        //if (ParticleSystem != null)
+        //{
+        //    if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        //        ParticleSystem.Play();
+        //    else
+        //        ParticleSystem.Pause();
+        //}
+
+        //moving forward
+        var movingForward = Vector3.Cross(transform.forward, Rigidbody.velocity).y < 0;
+
+        //move in direction
+        Rigidbody.velocity = Quaternion.AngleAxis(Vector3.SignedAngle(Rigidbody.velocity, (movingForward ? 1f : 0f) * transform.forward, Vector3.up) * Drag, Vector3.up) * Rigidbody.velocity;
+
+        //camera position
+        //Camera.transform.LookAt(transform.position + transform.forward * 6f + transform.up * 2f);
+        //Camera.transform.position = Vector3.SmoothDamp(Camera.transform.position, transform.position + transform.forward * -8f + transform.up * 2f, ref CamVel, 0.05f);
     }
-	
-    void Balance () {
-		GetComponent<Rigidbody> ().centerOfMass = getCOM().position;
-	}
 
-    void Movement () {
-		/*movementFactor = Mathf.Lerp (movementFactor, linearInputSystem.GetInput(), Time.deltaTime / movementThresold);
-        if(linearInputSystem.GetInput() >=0 )  
-        {
-            transform.Translate(movementFactor * speed, 0.0f, 0.0f);
-        }
-        else
-        {*/
-            var backwardMultiplier = movementFactor > 0 ? breakMultiplier : backwardMovementMultiplier;
-            transform.Translate(speed * linearInputSystem.GetInput(), 0.0f, 0.0f);
-        /*}*/
 
-		
-	}
-
-     void Steer () {
-
-		steerFactor = Mathf.Lerp (steerFactor, lateralInputSystem.GetInput() * movementFactor, Time.deltaTime / movementThresold);
-        /*if(steerFactor * lateralInputSystem.GetInput() < 0)
-        {
-            steerFactor = Mathf.Lerp(steerFactor, lateralInputSystem.GetInput() * movementFactor * oppositeSteerMultiplier, Time.deltaTime / movementThresold);
-        }*/
-        transform.RotateAround(pivot.position, Vector3.up, Time.deltaTime * steerSpeed * lateralInputSystem.GetInput());
-
-	}
-    Transform getCOM()
-    {
-        if (!m_COM) {
-			    m_COM = new GameObject ("COM").transform;
-			    m_COM.SetParent (transform);
-		    }
-        		    m_COM.position = COM_Position;
-            return m_COM;
-    }
 }
 
