@@ -15,14 +15,10 @@ public class PathInstructionDisplayer : MonoBehaviour
     private Vector3 m_nextMilestone;
     private void Update()
     {
-        if (modeManager.Mode == ShipModeManager.ShipMode.NAVIGATING) ShowNavInstructions();
-        if (modeManager.Mode == ShipModeManager.ShipMode.PARKING) ShowParkingInstructions();
+        if (modeManager.Mode != ShipModeManager.ShipMode.NAVIGATING) return;
+        ShowNavInstructions();
     }
 
-    private void ShowParkingInstructions()
-    {
-        throw new System.NotImplementedException();
-    }
 
     private void ShowNavInstructions()
     {
