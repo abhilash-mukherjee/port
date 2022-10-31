@@ -14,6 +14,10 @@ public class ShipParkingManager : MonoBehaviour
     private Transform shipCOM;
     private bool m_hasReachedPosition, m_hasReachedOrientation;
     private string m_instructions;
+    private bool m_isDockable = false;
+
+    public bool IsDockable { get => m_isDockable;}
+
     private void Update()
     {
         if (shipModeManager.Mode != ShipModeManager.ShipMode.PARKING) return;
@@ -25,8 +29,11 @@ public class ShipParkingManager : MonoBehaviour
         if(m_hasReachedOrientation && m_hasReachedPosition)
         {
             m_instructions = "Perfect. You have parked successfully. Now, dock the ship";
+            m_isDockable = true;
+            directionText.text = m_instructions;
+            return;
         }
-         
+
         else if (!m_hasReachedOrientation && m_hasReachedPosition)
         {
             var angle = Vector3.SignedAngle(shipCOM.forward, targetParkingSlot.forward, Vector3.up);
@@ -50,7 +57,12 @@ public class ShipParkingManager : MonoBehaviour
             }
         }
         directionText.text = m_instructions;
+        m_isDockable = false;
     }
 
-   
+   public void OnDocked()
+    {
+        m_instructions = "Ship Docked";
+        directionText.text = m_instructions;
+    }
 }

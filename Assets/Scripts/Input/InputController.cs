@@ -10,7 +10,7 @@ public class InputController : MonoBehaviour
     private InputAction linearMovementAction, steerMovementAction;
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
-    [SerializeField] GameEvent hornPressed;
+    [SerializeField] GameEvent hornPressed, dockPressed;
     private InputAction shipInput;
     private void Awake()
     {
@@ -23,12 +23,19 @@ public class InputController : MonoBehaviour
         linearMovementAction.Enable();
         steerMovementAction.Enable();
         shipInputActions.Ship.Horn.performed += OnHornPressed;
+        shipInputActions.Ship.Dock.performed += OnDockPressed;
         shipInputActions.Ship.Horn.Enable();
+        shipInputActions.Ship.Dock.Enable();
     }
 
     private void OnHornPressed(InputAction.CallbackContext obj)
     {
         hornPressed.Raise();
+    }
+     private void OnDockPressed(InputAction.CallbackContext obj)
+    {
+        Debug.Log("Dock pressed");
+        dockPressed.Raise();
     }
 
     private void OnDisable()
@@ -36,7 +43,9 @@ public class InputController : MonoBehaviour
         linearMovementAction.Disable();
         steerMovementAction.Disable();
         shipInputActions.Ship.Horn.performed -= OnHornPressed;
+        shipInputActions.Ship.Dock.performed -= OnDockPressed;
         shipInputActions.Ship.Horn.Disable();
+        shipInputActions.Ship.Dock.Disable();
     }
     private void FixedUpdate()
     {

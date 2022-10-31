@@ -3,6 +3,7 @@
 public class ParkingArea : MonoBehaviour
 {
     [SerializeField] private TMPro.TextMeshProUGUI parkingText;
+    [SerializeField] GameEvent OnParkingAreaReached, OnParkingAreaLeft;
     private bool m_isInsideParking = false;
     private void OnTriggerEnter(Collider other)
     {
@@ -13,6 +14,7 @@ public class ParkingArea : MonoBehaviour
             modeManager.ChangeShipMode(ShipModeManager.ShipMode.PARKING);
             m_isInsideParking = true;
             parkingText.text = "Parking Area Reached";
+            OnParkingAreaReached.Raise();
         }
     }
 
@@ -25,6 +27,7 @@ public class ParkingArea : MonoBehaviour
             modeManager.ChangeShipMode(ShipModeManager.ShipMode.NAVIGATING);
             m_isInsideParking = false;
             parkingText.text = "Parking Area Left";
+            OnParkingAreaLeft.Raise();
 
         }
     }

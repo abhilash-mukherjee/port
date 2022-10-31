@@ -9,6 +9,8 @@ public class MovementController : MonoBehaviour
     //visible Properties
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
+    [SerializeField] private ShipModeManager shipModeManager;
+    [SerializeField] private TMPro.TextMeshProUGUI directionText;
     [SerializeField] private float nonSteerAngularDrag = 2f;
     [SerializeField] private float steerAngularDrag = 0.05f;
     public Transform Motor;
@@ -37,8 +39,14 @@ public class MovementController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        //default direction
-        var forceDirection = transform.forward;
+        if (shipModeManager.Mode == ShipModeManager.ShipMode.DOCKED)
+        {
+            directionText.text = "Ship is docked. Press B to undock";
+            return;
+        }
+        else directionText.text = "";
+       //default direction
+       var forceDirection = transform.forward;
 
         Rigidbody.angularDrag = steerInput.Value == 0 ? nonSteerAngularDrag : steerAngularDrag;
         //Rotational Force

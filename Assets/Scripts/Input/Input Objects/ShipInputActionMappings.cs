@@ -53,6 +53,15 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dock"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac41a82b-3609-4470-b7ed-11064a9ba487"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -231,6 +240,28 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""Horn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d641e782-edf9-40c1-8d47-4470241c3454"",
+                    ""path"": ""<Keyboard>/#(B)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f09a58f1-753d-4c7a-abd8-79373aeb2289"",
+                    ""path"": ""<XRController>{RightHand}/secondaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dock"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -242,6 +273,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         m_Ship_Steer = m_Ship.FindAction("Steer", throwIfNotFound: true);
         m_Ship_LinearMovement = m_Ship.FindAction("LinearMovement", throwIfNotFound: true);
         m_Ship_Horn = m_Ship.FindAction("Horn", throwIfNotFound: true);
+        m_Ship_Dock = m_Ship.FindAction("Dock", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -304,6 +336,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     private readonly InputAction m_Ship_Steer;
     private readonly InputAction m_Ship_LinearMovement;
     private readonly InputAction m_Ship_Horn;
+    private readonly InputAction m_Ship_Dock;
     public struct ShipActions
     {
         private @ShipInputActionMappings m_Wrapper;
@@ -311,6 +344,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         public InputAction @Steer => m_Wrapper.m_Ship_Steer;
         public InputAction @LinearMovement => m_Wrapper.m_Ship_LinearMovement;
         public InputAction @Horn => m_Wrapper.m_Ship_Horn;
+        public InputAction @Dock => m_Wrapper.m_Ship_Dock;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -329,6 +363,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @Horn.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnHorn;
                 @Horn.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnHorn;
                 @Horn.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnHorn;
+                @Dock.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnDock;
+                @Dock.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnDock;
+                @Dock.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnDock;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -342,6 +379,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @Horn.started += instance.OnHorn;
                 @Horn.performed += instance.OnHorn;
                 @Horn.canceled += instance.OnHorn;
+                @Dock.started += instance.OnDock;
+                @Dock.performed += instance.OnDock;
+                @Dock.canceled += instance.OnDock;
             }
         }
     }
@@ -351,5 +391,6 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         void OnSteer(InputAction.CallbackContext context);
         void OnLinearMovement(InputAction.CallbackContext context);
         void OnHorn(InputAction.CallbackContext context);
+        void OnDock(InputAction.CallbackContext context);
     }
 }
