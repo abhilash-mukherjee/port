@@ -9,7 +9,9 @@ public class MovementController : MonoBehaviour
     //visible Properties
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
-    [SerializeField] private ShipModeManager shipModeManager;
+    [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
+    [SerializeField] private ShipModeNameContainer currentMode;
+
     [SerializeField] private TMPro.TextMeshProUGUI directionText;
     [SerializeField] private float nonSteerAngularDrag = 2f;
     [SerializeField] private float steerAngularDrag = 0.05f;
@@ -39,7 +41,7 @@ public class MovementController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if (shipModeManager.Mode == ShipModeManager.ShipMode.DOCKED)
+        if (currentMode.ModeName == dockedMode)
         {
             directionText.text = "Ship is docked. Press B to undock";
             return;

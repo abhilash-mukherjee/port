@@ -8,19 +8,20 @@ public class ShipParkingManager : MonoBehaviour
     private Transform targetParkingSlot;
     [SerializeField]
     private float parkingPositionError = 2f, parkingOrientationError = 5f, maxParkingAreaEnteringAngle = 20;
-    [SerializeField]
-    private ShipModeManager shipModeManager;
+    [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
+    [SerializeField] private ShipModeNameContainer currentMode;
+
+
     [SerializeField]
     private Transform shipCOM;
+    [SerializeField]
+    private BoolVariable IsShipDockable;
     private bool m_hasReachedPosition, m_hasReachedOrientation;
     private string m_instructions;
-    private bool m_isDockable = false;
-
-    public bool IsDockable { get => m_isDockable;}
 
     private void Update()
     {
-        if (shipModeManager.Mode != ShipModeManager.ShipMode.PARKING) return;
+        if (currentMode.ModeName != parkingMode) return;
         var m_tempVec = (shipCOM.position - targetParkingSlot.position);
         m_tempVec.y = 0;
         m_hasReachedPosition = m_tempVec.magnitude < parkingPositionError;
@@ -29,7 +30,7 @@ public class ShipParkingManager : MonoBehaviour
         if(m_hasReachedOrientation && m_hasReachedPosition)
         {
             m_instructions = "Perfect. You have parked successfully. Now, dock the ship";
-            m_isDockable = true;
+            IsShipDockable.Value = true;
             directionText.text = m_instructions;
             return;
         }
@@ -57,7 +58,7 @@ public class ShipParkingManager : MonoBehaviour
             }
         }
         directionText.text = m_instructions;
-        m_isDockable = false;
+        IsShipDockable.Value = false;
     }
 
    public void OnDocked()

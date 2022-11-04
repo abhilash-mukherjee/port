@@ -2,27 +2,31 @@
 
 public class ShipModeManager : MonoBehaviour
 {
-    [SerializeField] private ShipParkingManager shipParkingManager;
-    public enum ShipMode
-    {
-        NAVIGATING,
-        PARKING,
-        DOCKED
-    }
-    private ShipMode m_mode;
+    [SerializeField] private BoolVariable IsShipDockable;
+    [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
+    [SerializeField] private ShipModeNameContainer currentMode;
 
-    public ShipMode Mode { get => m_mode; }
-    public void ChangeShipMode(ShipMode newMode)
+
+
+    private void OnEnable()
     {
-        m_mode = newMode;
+        
+    }
+    private void OnDisable()
+    {
+        
+    }
+    public void OnModeChanged()
+    {
+        // mode change logic
     }
     public void OnDockToggled()
     {
-        if (m_mode == ShipMode.DOCKED) m_mode = ShipMode.PARKING;
-        else if (m_mode == ShipMode.PARKING && shipParkingManager.IsDockable) m_mode = ShipMode.DOCKED;
+        if (currentMode.ModeName == dockedMode) currentMode.ModeName = parkingMode;
+        else if (currentMode.ModeName == parkingMode && IsShipDockable.Value == true) currentMode.ModeName = dockedMode;
     }
     private void Awake()
     {
-        m_mode = ShipMode.NAVIGATING;
+        currentMode.ModeName = navigatingMode;
     }
 }

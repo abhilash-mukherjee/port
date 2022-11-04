@@ -7,7 +7,8 @@ public class PathInstructionDisplayer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI directionText;
     [SerializeField] private ShipPathManager pathManager;
-    [SerializeField] private ShipModeManager modeManager;
+    [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
+    [SerializeField] private ShipModeNameContainer currentMode;
     [SerializeField] private GameObject driverSeat;
     [SerializeField] private float distanceCorrection = -24f;
 
@@ -15,7 +16,7 @@ public class PathInstructionDisplayer : MonoBehaviour
     private Vector3 m_nextMilestone;
     private void Update()
     {
-        if (modeManager.Mode != ShipModeManager.ShipMode.NAVIGATING) return;
+        if (currentMode.ModeName != navigatingMode) return;
         ShowNavInstructions();
     }
 
@@ -29,6 +30,7 @@ public class PathInstructionDisplayer : MonoBehaviour
     }
     public void OnDirectionUpdated()
     {
+        Debug.Log("Direction updated");
         m_nextMilestone = pathManager.NextMileStone;
     }
 }

@@ -11,7 +11,7 @@ public class ShipPathManager : MonoBehaviour
     [SerializeField]
     private PathMarker pathMarker;
     [SerializeField]
-    private GameEvent onPathInstructionsUpdated;
+    private GameEvent OnMilestoneUpdated;
 
     [SerializeField]
     private float markerGap;
@@ -32,7 +32,7 @@ public class ShipPathManager : MonoBehaviour
     void Start()
     {
         SpawnObjects();
-        UpdatePathInstructions();
+        UpdateMilestone();
     }
 
     private void SpawnObjects()
@@ -56,9 +56,9 @@ public class ShipPathManager : MonoBehaviour
         if (pathMarkers.Count <= 1)
             return;
         pathMarkers.Dequeue();
-        UpdatePathInstructions();
+        UpdateMilestone();
     }
-    public void UpdatePathInstructions()
+    public void UpdateMilestone()
     {
         if (pathMarkers.Count == 0)
         {
@@ -67,7 +67,7 @@ public class ShipPathManager : MonoBehaviour
             return;
         }
         m_nextMileStone = GetNextMilestone();
-        onPathInstructionsUpdated.Raise();
+        OnMilestoneUpdated.Raise();
     }
 
     private Vector3 GetNextMilestone()
