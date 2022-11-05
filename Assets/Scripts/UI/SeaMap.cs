@@ -22,7 +22,11 @@ public class SeaMap : MonoBehaviour
 
     private void Update()
     {
-        foreach (var element in mapElements) element.UpdatePosition(seaCenter, m_scaleReductionFactor);
+        foreach (var element in mapElements)
+        {
+            element.UpdateTransform(seaCenter, m_scaleReductionFactor);
+            element.UpdateRotation(seaCenter, transform);
+        }
     }
     private void InstantiateMapObjects()
     {
@@ -35,12 +39,14 @@ public class SeaMap : MonoBehaviour
             imgComp.preserveAspect = true;
             imgComp.transform.SetParent(mapBG.transform);
             imgComp.transform.localScale = element.scaleIndex * Vector3.one;
+            imgComp.transform.localPosition = Vector3.zero;
             element.mapElementTransform = imgComp.GetComponent<RectTransform>();
             var rectTrans = imgObj.GetComponent<RectTransform>();
             var col = imgObj.AddComponent<CircleCollider2D>();
             col.radius = Mathf.Min(rectTrans.rect.height, rectTrans.rect.width);
             var rbd = imgObj.AddComponent<Rigidbody2D>();
             rbd.freezeRotation = true;
+            rbd.bodyType = RigidbodyType2D.Kinematic;
             rbd.gravityScale = 0;
 
         }
@@ -56,11 +62,21 @@ public class MapElement
     [HideInInspector]
     public RectTransform mapElementTransform;
 
-    public void UpdatePosition(Vector3 globalCentre, float scaleReductionFactor)
+    public void UpdateTransform(Vector3 globalCentre, float scaleReductionFactor)
     {
         var locaPos = GetScaledPosition(mapElementTransform, globalCentre, scaleReductionFactor);
-        mapElementTransform.anchoredPosition = new Vector2(locaPos.x, locaPos.z);
-        mapElementTransform.Rotate(new Vector3(0, GlobalTransform.rotation.y, 0));
+        mapElementTransform.anchoredPosition = new Vector2(-locaPos.x, locaPos.z);
+        
+    }
+
+    internal void UpdateRotation(Vector3 globalCentre, Transform transform)
+    {
+        var centreDir = Vector3.Scale(globalCentre - GlobalTransform.position, new Vector3(1, 0, 1));
+        var forward = Vector3.Scale(GlobalTransform.forward, new Vector3(1, 0, 1));
+        var angle = Vector3.SignedAngle(centreDir, forward, Vector3.up);
+        Debug.Log("Angle = " + angle);
+        var mapElementUp = Quaternion.AngleAxis(angle, transform.forward) * Vector3.up;
+        mapElementTransform.up = mapElementUp;
     }
 
     private Vector3 GetScaledPosition(Transform _transform, Vector3 globalCentre, float scaleReductionFactor)
@@ -68,6 +84,6 @@ public class MapElement
         var _globalRelativePositionVector = (GlobalTransform.position - globalCentre);
         var _scalingVector = new Vector3(scaleReductionFactor, 0, scaleReductionFactor);
         var relPos = Vector3.Scale(_globalRelativePositionVector, _scalingVector);
-        return relPos;
+        return relPos; 
     }
 }

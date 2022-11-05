@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(WaterFloat))]
-[RequireComponent(typeof(InputController))]
 public class MovementController : MonoBehaviour
 {
     //visible Properties

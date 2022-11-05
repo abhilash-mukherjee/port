@@ -62,6 +62,15 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleView"",
+                    ""type"": ""Button"",
+                    ""id"": ""c9aa0b20-199f-4e54-8623-50903afc51c7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -262,6 +271,28 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""Dock"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb3091c4-8264-4ed9-a8fc-b29d037fe5e5"",
+                    ""path"": ""<Keyboard>/#(X)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3199175-6e01-46ae-83cc-609db54f83fe"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/primaryButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleView"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -274,6 +305,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         m_Ship_LinearMovement = m_Ship.FindAction("LinearMovement", throwIfNotFound: true);
         m_Ship_Horn = m_Ship.FindAction("Horn", throwIfNotFound: true);
         m_Ship_Dock = m_Ship.FindAction("Dock", throwIfNotFound: true);
+        m_Ship_ToggleView = m_Ship.FindAction("ToggleView", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -337,6 +369,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     private readonly InputAction m_Ship_LinearMovement;
     private readonly InputAction m_Ship_Horn;
     private readonly InputAction m_Ship_Dock;
+    private readonly InputAction m_Ship_ToggleView;
     public struct ShipActions
     {
         private @ShipInputActionMappings m_Wrapper;
@@ -345,6 +378,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         public InputAction @LinearMovement => m_Wrapper.m_Ship_LinearMovement;
         public InputAction @Horn => m_Wrapper.m_Ship_Horn;
         public InputAction @Dock => m_Wrapper.m_Ship_Dock;
+        public InputAction @ToggleView => m_Wrapper.m_Ship_ToggleView;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -366,6 +400,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @Dock.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnDock;
                 @Dock.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnDock;
                 @Dock.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnDock;
+                @ToggleView.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
+                @ToggleView.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
+                @ToggleView.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -382,6 +419,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @Dock.started += instance.OnDock;
                 @Dock.performed += instance.OnDock;
                 @Dock.canceled += instance.OnDock;
+                @ToggleView.started += instance.OnToggleView;
+                @ToggleView.performed += instance.OnToggleView;
+                @ToggleView.canceled += instance.OnToggleView;
             }
         }
     }
@@ -392,5 +432,6 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         void OnLinearMovement(InputAction.CallbackContext context);
         void OnHorn(InputAction.CallbackContext context);
         void OnDock(InputAction.CallbackContext context);
+        void OnToggleView(InputAction.CallbackContext context);
     }
 }

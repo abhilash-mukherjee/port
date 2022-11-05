@@ -10,7 +10,7 @@ public class InputController : MonoBehaviour
     private InputAction linearMovementAction, steerMovementAction;
     [SerializeField] private SteerInput steerInput;
     [SerializeField] private LinearInput linearInput;
-    [SerializeField] GameEvent hornPressed, dockPressed;
+    [SerializeField] GameEvent hornPressed, dockPressed, viewToggled;
     private InputAction shipInput;
     private void Awake()
     {
@@ -24,8 +24,10 @@ public class InputController : MonoBehaviour
         steerMovementAction.Enable();
         shipInputActions.Ship.Horn.performed += OnHornPressed;
         shipInputActions.Ship.Dock.performed += OnDockPressed;
+        shipInputActions.Ship.ToggleView.performed += OnViewToggled;
         shipInputActions.Ship.Horn.Enable();
         shipInputActions.Ship.Dock.Enable();
+        shipInputActions.Ship.ToggleView.Enable();
     }
 
     private void OnHornPressed(InputAction.CallbackContext obj)
@@ -37,6 +39,13 @@ public class InputController : MonoBehaviour
         Debug.Log("Dock pressed");
         dockPressed.Raise();
     }
+    
+    
+    private void OnViewToggled(InputAction.CallbackContext obj)
+    {
+        Debug.Log("View toggled");
+        viewToggled.Raise();
+    }
 
     private void OnDisable()
     {
@@ -44,8 +53,10 @@ public class InputController : MonoBehaviour
         steerMovementAction.Disable();
         shipInputActions.Ship.Horn.performed -= OnHornPressed;
         shipInputActions.Ship.Dock.performed -= OnDockPressed;
+        shipInputActions.Ship.ToggleView.performed -= OnViewToggled;
         shipInputActions.Ship.Horn.Disable();
         shipInputActions.Ship.Dock.Disable();
+        shipInputActions.Ship.ToggleView.Disable();
     }
     private void FixedUpdate()
     {
