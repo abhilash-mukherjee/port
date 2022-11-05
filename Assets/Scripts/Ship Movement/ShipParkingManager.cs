@@ -67,3 +67,4 @@ public class ShipParkingManager : MonoBehaviour
         directionText.text = m_instructions;
     }
 }
+
