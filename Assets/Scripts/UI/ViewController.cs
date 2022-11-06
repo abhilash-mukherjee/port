@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ViewController : MonoBehaviour
 {
-    [SerializeField] private Camera SailorView, OperatorView;
+    [SerializeField] private OVRManager SailorView, OperatorView;
     private void Awake()
     {
         OperatorView.gameObject.SetActive(false);
