@@ -6,14 +6,14 @@ using UnityEngine;
 public class ParkingUI : MonoBehaviour
 {
     [SerializeField] private GameObject glow;
-    [SerializeField] private string ID;
+    [SerializeField] private ElementID ID;
     static ParkingUI selectedParking;
     private void OnEnable()
     {
         InteractableMapElement.OnElementPressed += AddGlow;
     }
 
-    private void AddGlow(string ID)
+    private void AddGlow(ElementID ID)
     {
         if (ID != this.ID) return;
         if(selectedParking != null) selectedParking.RemoveGlow();

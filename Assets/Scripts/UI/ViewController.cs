@@ -4,14 +4,23 @@ using UnityEngine;
 
 public class ViewController : MonoBehaviour
 {
-    [SerializeField] private OVRManager SailorView, OperatorView;
-    private void Awake()
+    [SerializeField]
+    private Transform OperatorXROrigin, SailorXROrigin;
+    [SerializeField]
+    private OVRManager oVRManager;
+    private bool m_toggler = true;
+    private void Start()
     {
-        OperatorView.gameObject.SetActive(false);
+        oVRManager.gameObject.transform.SetParent(SailorXROrigin);
+        oVRManager.gameObject.transform.localPosition = Vector3.zero;
+        oVRManager.gameObject.transform.localRotation = Quaternion.identity;
+        m_toggler = true; 
     }
     public void OnViewToggled() 
     {
-        SailorView.gameObject.SetActive(!(SailorView.gameObject.activeSelf));
-        OperatorView.gameObject.SetActive((!OperatorView.gameObject.activeSelf));
+        oVRManager.gameObject.transform.SetParent(m_toggler == true  ? OperatorXROrigin : SailorXROrigin);
+        m_toggler = !m_toggler;
+        oVRManager.gameObject.transform.localPosition = Vector3.zero;
+        oVRManager.gameObject.transform.localRotation = Quaternion.identity;
     }
 }

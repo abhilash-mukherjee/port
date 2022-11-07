@@ -2,13 +2,13 @@
 
 public class InteractableMapElement : MonoBehaviour
 {
-    public delegate void ElementPressedHandler(string ID);
+    public delegate void ElementPressedHandler(ElementID ID);
     public static event ElementPressedHandler OnElementPressed;
     private GameObject presser;
-    [SerializeField]private string m_elementID;
+    [SerializeField]private ElementID m_elementID;
     [SerializeField] GameEvent btnPressed;
     private bool isPressed;
-    public string ElementID {set => m_elementID = value; }
+    public ElementID ElementID {set => m_elementID = value; }
 
 
     private void Start()
@@ -27,6 +27,6 @@ public class InteractableMapElement : MonoBehaviour
         isPressed = false;
         OnElementPressed?.Invoke(m_elementID);
         btnPressed.Raise();
-        Debug.Log(m_elementID + "selected");
+        Debug.Log(m_elementID + "selected"); 
     }
 }
