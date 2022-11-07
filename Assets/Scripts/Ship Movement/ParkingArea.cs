@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class ParkingArea : MonoBehaviour
 {
+    public delegate void ParkingAreaEnterExitManager(ParkingArea parkingArea);
+    public static event ParkingAreaEnterExitManager OnParkingEntered, OnParkingLeft;
     [SerializeField] private TMPro.TextMeshProUGUI parkingText;
     [SerializeField] GameEvent OnParkingAreaReached, OnParkingAreaLeft;
     [SerializeField] private ShipModeName navigatingMode, parkingMode, dockedMode;
@@ -20,6 +23,7 @@ public class ParkingArea : MonoBehaviour
             m_isInsideParking = true;
             parkingText.text = "Parking Area Reached";
             OnParkingAreaReached.Raise();
+            OnParkingEntered?.Invoke(this);
         }
     }
 
@@ -34,6 +38,7 @@ public class ParkingArea : MonoBehaviour
             m_isInsideParking = false;
             parkingText.text = "Parking Area Left";
             OnParkingAreaLeft.Raise();
+            OnParkingLeft?.Invoke(this);
 
         }
     }

@@ -50,7 +50,7 @@ public class MapElement
         var forward = Vector3.Scale(GlobalTransform.forward, new Vector3(1, 0, 1));
         var angle = Vector3.SignedAngle(centreDir, forward, Vector3.up);
         Debug.Log("Angle = " + angle);
-        var mapElementUp = Quaternion.AngleAxis(angle, transform.forward) * Vector3.up;
+        var mapElementUp = Quaternion.AngleAxis(angle, -transform.forward) * Vector3.up;
         mapElementTransform.up = mapElementUp;
     }
 

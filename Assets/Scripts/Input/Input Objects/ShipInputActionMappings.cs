@@ -71,6 +71,15 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectParkingArea"",
+                    ""type"": ""Button"",
+                    ""id"": ""8cc54b31-b5db-49b9-aeae-9076fa303019"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -293,6 +302,28 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                     ""action"": ""ToggleView"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26a5e2e7-0939-458e-abd9-dd65caa308aa"",
+                    ""path"": ""<Keyboard>/#(Y)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectParkingArea"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ee80383-8d7f-464c-9088-1b4327077265"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/secondaryTouched"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectParkingArea"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -306,6 +337,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         m_Ship_Horn = m_Ship.FindAction("Horn", throwIfNotFound: true);
         m_Ship_Dock = m_Ship.FindAction("Dock", throwIfNotFound: true);
         m_Ship_ToggleView = m_Ship.FindAction("ToggleView", throwIfNotFound: true);
+        m_Ship_SelectParkingArea = m_Ship.FindAction("SelectParkingArea", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -370,6 +402,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
     private readonly InputAction m_Ship_Horn;
     private readonly InputAction m_Ship_Dock;
     private readonly InputAction m_Ship_ToggleView;
+    private readonly InputAction m_Ship_SelectParkingArea;
     public struct ShipActions
     {
         private @ShipInputActionMappings m_Wrapper;
@@ -379,6 +412,7 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         public InputAction @Horn => m_Wrapper.m_Ship_Horn;
         public InputAction @Dock => m_Wrapper.m_Ship_Dock;
         public InputAction @ToggleView => m_Wrapper.m_Ship_ToggleView;
+        public InputAction @SelectParkingArea => m_Wrapper.m_Ship_SelectParkingArea;
         public InputActionMap Get() { return m_Wrapper.m_Ship; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -403,6 +437,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @ToggleView.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
                 @ToggleView.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
                 @ToggleView.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnToggleView;
+                @SelectParkingArea.started -= m_Wrapper.m_ShipActionsCallbackInterface.OnSelectParkingArea;
+                @SelectParkingArea.performed -= m_Wrapper.m_ShipActionsCallbackInterface.OnSelectParkingArea;
+                @SelectParkingArea.canceled -= m_Wrapper.m_ShipActionsCallbackInterface.OnSelectParkingArea;
             }
             m_Wrapper.m_ShipActionsCallbackInterface = instance;
             if (instance != null)
@@ -422,6 +459,9 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
                 @ToggleView.started += instance.OnToggleView;
                 @ToggleView.performed += instance.OnToggleView;
                 @ToggleView.canceled += instance.OnToggleView;
+                @SelectParkingArea.started += instance.OnSelectParkingArea;
+                @SelectParkingArea.performed += instance.OnSelectParkingArea;
+                @SelectParkingArea.canceled += instance.OnSelectParkingArea;
             }
         }
     }
@@ -433,5 +473,6 @@ public partial class @ShipInputActionMappings : IInputActionCollection2, IDispos
         void OnHorn(InputAction.CallbackContext context);
         void OnDock(InputAction.CallbackContext context);
         void OnToggleView(InputAction.CallbackContext context);
+        void OnSelectParkingArea(InputAction.CallbackContext context);
     }
 }

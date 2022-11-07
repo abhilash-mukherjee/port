@@ -1,13 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
-
+using System.Linq;
 
 public class ShipPathManager : MonoBehaviour
 {
-    [SerializeField]
-    private PathCreator pathCreator;
+    public delegate void TargetParkingUpdateHandler(ShipPathManager pathManager, Transform targetParkingTransform);
+    public static event TargetParkingUpdateHandler OnTargetParkingAreaUpdated;
+
     [SerializeField]
     private PathMarker pathMarker;
     [SerializeField]
@@ -17,10 +18,8 @@ public class ShipPathManager : MonoBehaviour
     private float markerGap;
     [SerializeField] private float distanceCorrection = 24f;
     [SerializeField] private GameObject driverSeat;
+    [SerializeField] private List<ParkingToPath> paths;
 
-
-
-    private Vector3 m_nextMileStone;
 
 
     public Queue<PathMarker> pathMarkers;
@@ -29,17 +28,40 @@ public class ShipPathManager : MonoBehaviour
     public Vector3 NextMileStone { get => m_nextMileStone; }
     public GameObject DriverSeat { get => driverSeat; }
 
-    void Start()
+    private Vector3 m_nextMileStone;
+    private GameObject m_pathObjectContainer;
+    private PathCreator m_currentPathCreator;
+
+    private void OnEnable()
     {
-        SpawnObjects();
-        UpdateMilestone();
+        ParkingAreaSelector.OnAreaSelected += OnPathŪpdated;
+    }
+    private void OnDisable()
+    {
+        ParkingAreaSelector.OnAreaSelected -= OnPathŪpdated;
     }
 
-    private void SpawnObjects()
+    private void OnPathŪpdated(ElementID parkingAreaID)
+    {
+        var path = paths.Find(p => p.parkingAreaID == parkingAreaID);
+        UpdateTargetPath(path.pathCreator);
+        OnTargetParkingAreaUpdated?.Invoke(this, path.parkingAreaTransform);
+    }
+
+    private void UpdateTargetPath(PathCreator pathCreator)
+    {
+        if (m_pathObjectContainer != null) Destroy(m_pathObjectContainer);
+        m_currentPathCreator = pathCreator;
+        m_pathObjectContainer = SpawnObjects(pathCreator);
+        UpdateMilestone(pathCreator);
+    }
+
+    private GameObject SpawnObjects(PathCreator pathCreator)
     {
         pathMarkers = new Queue<PathMarker>();
         float dist = 0;
         VertexPath path = pathCreator.path;
+        var pathObjectContainer = Instantiate(new GameObject());
         while (dist < path.length)
         {
             Vector3 point = path.GetPointAtDistance(dist);
@@ -48,22 +70,24 @@ public class ShipPathManager : MonoBehaviour
             var marker = obj.GetComponent<PathMarker>();
             marker.PathManager = this;
             pathMarkers.Enqueue(marker);
+            marker.transform.SetParent(pathObjectContainer.transform);
             dist += markerGap;
         }
+        return pathObjectContainer;
     }
     public void OnNewMarkerReached()
     {
         if (pathMarkers.Count <= 1)
             return;
         pathMarkers.Dequeue();
-        UpdateMilestone();
+        if(m_currentPathCreator != null) UpdateMilestone(m_currentPathCreator);
     }
-    public void UpdateMilestone()
+    public void UpdateMilestone(PathCreator pathCreator)
     {
         if (pathMarkers.Count == 0)
         {
             Debug.Log("ZERO");
-            SpawnObjects();
+            SpawnObjects(pathCreator);
             return;
         }
         m_nextMileStone = GetNextMilestone();
@@ -74,5 +98,12 @@ public class ShipPathManager : MonoBehaviour
     {
         return pathMarkers.Peek().gameObject.transform.position;
 
+    }
+    [System.Serializable]
+    public class ParkingToPath
+    {
+        public PathCreator pathCreator;
+        public ElementID parkingAreaID;
+        public Transform parkingAreaTransform;
     }
 }

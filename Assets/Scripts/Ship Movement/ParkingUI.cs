@@ -10,7 +10,7 @@ public class ParkingUI : MonoBehaviour
     static ParkingUI selectedParking;
     private void OnEnable()
     {
-        InteractableMapElement.OnElementPressed += AddGlow;
+        ParkingAreaSelector.OnAreaSelected += AddGlow;
     }
 
     private void AddGlow(ElementID ID)
@@ -28,7 +28,7 @@ public class ParkingUI : MonoBehaviour
 
     private void OnDisable()
     {
-        InteractableMapElement.OnElementPressed -= AddGlow;
+        ParkingAreaSelector.OnAreaSelected -= AddGlow;
         
     }
 }
