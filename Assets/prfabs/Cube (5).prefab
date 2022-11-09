@@ -76,7 +76,6 @@ GameObject:
   - component: {fileID: 2464725427312011499}
   - component: {fileID: 2725326940073176715}
   - component: {fileID: 5894550239132897969}
-  - component: {fileID: 7666980217205793597}
   m_Layer: 0
   m_Name: Cube (5)
   m_TagString: Untagged
@@ -92,7 +91,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2567196124630774088}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.3958836, y: 7.9136643, z: -0.0000009536743}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1.54, z: 3.58}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -178,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2620f38b4b513de4091d9cd58d7ad2d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceCorrection: -50
+  distanceCorrection: 35
 --- !u!54 &5894550239132897969
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -195,27 +194,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7666980217205793597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2567196124630774088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f45aa97d350e77940a53b7fe24d52974, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AirDrag: 1
-  WaterDrag: 1
-  AffectDirection: 1
-  AttachToSurface: 1
-  FloatPoints:
-  - {fileID: 8581138204609806810}
-  - {fileID: 1626557647519368081}
-  - {fileID: 4993963048416916851}
-  - {fileID: 3969438193088550159}
 --- !u!1 &5053492449333768906
 GameObject:
   m_ObjectHideFlags: 0

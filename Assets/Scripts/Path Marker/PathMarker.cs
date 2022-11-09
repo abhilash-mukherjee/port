@@ -5,28 +5,38 @@ using UnityEngine;
 public class PathMarker : MonoBehaviour
 {
     [SerializeField] private float distanceCorrection = -24f;
-    protected ShipPathManager m_spawnner;
+    protected ShipPathManager m_pathManager;
+    private Transform m_parkingArea;
     public ShipPathManager PathManager
     {
         get
         {
-            return m_spawnner;
+            return m_pathManager;
         }
         set
         {
-            m_spawnner = value;
+            m_pathManager = value;
         }
     }
 
+    public Transform ParkingArea { get => m_parkingArea; set => m_parkingArea = value; }
+
     void Update()
     {
-        if (PathManager.DriverSeat.transform.position.z - transform.position.z > distanceCorrection)
+        var dir = m_parkingArea.position - transform.position;
+        if (GetDistanceAlongDirection(transform.position,m_pathManager.transform.position,dir) < distanceCorrection)
         {
             OnShipHitMarker();
 
         }
     }
 
+    float GetDistanceAlongDirection(Vector3 to, Vector3 from, Vector3 dir)
+    {
+        dir = dir.normalized;
+        var a = to - from;
+        return Vector3.Dot(a, dir);
+    }
     // private void OnTriggerEnter(Collider other)
     // {
     //     Debug.Log(Spawnner);
